@@ -1,0 +1,22 @@
+{
+  "name": "my-pf-api",
+  "version": "1.0.0",
+  "description": "An API that allows clients to create and manage their personal finances using Envelope Budgeting principles.",
+  "main": "server.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Abdihakim-Muhumed/my-pf-api.git"
+  },
+  "author": "Abdihakim Muhumed",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Abdihakim-Muhumed/my-pf-api/issues"
+  },
+  "homepage": "https://github.com/Abdihakim-Muhumed/my-pf-api#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
