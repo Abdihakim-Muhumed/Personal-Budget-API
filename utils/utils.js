@@ -6,6 +6,9 @@ const getAllEnvelopes = () => {
 
 const getEnvelopeById = (id) => {
     const envelope = envelopes.find(envelope => envelope.id = Number(id))
+    if(!envelope){
+        throw new Error('Invalid envelope ID')
+    }
     return envelope
 }
 
