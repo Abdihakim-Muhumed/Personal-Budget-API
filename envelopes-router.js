@@ -23,4 +23,13 @@ envelopesRouter.get('/:id', (req, res) => {
         res.status(404).send()
     }
 })
+
+envelopesRouter.post('/', (req, res) => {
+    try {
+        const newEnvelope = addNewEnvelope(req.query)
+        res.status(201).send(newEnvelope)
+    } catch (error) {
+        res.status(404).send(error.message)
+    }
+})
 module.exports = envelopesRouter
