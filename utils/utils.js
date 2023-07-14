@@ -1,5 +1,4 @@
-const {envelopes} = require('./data.js')
-let totalBudget = require('./data.js')
+let {totalBudget, envelopes} = require('./data.js')
 
 const getAllEnvelopes = () => {
     return envelopes
@@ -36,24 +35,26 @@ const updateEnvelopeBalance = (id, amountSpent) => {
 }
 
 const updateEnvelope = (id, envelope) => {
-    const envelopeIdnex = envelopes.findIndex(envelopeFound => envelopeFound.id = Number(id))
-    if(envelopeIdnex === -1){
-        throw new Error('Invalid envelope ID!')
+    const envelopeIndex = envelopes.findIndex(envelopeFound => envelopeFound.id = Number(id))
+    if(envelopeIndex === -1){
+        throw new Error('Envelope not found!')
     }
     if (envelope.id) {
         envelope.id = Number(envelope.id);
       }
-    Object.assign(envelopes[envelopeIdnex], envelope);
-    return envelopes[envelopeIdnex];
+    Object.assign(envelopes[envelopeIndex], envelope);
+    return envelopes[envelopeIndex];
 }
 
 const deleteEnvelope = id => {
     const index = envelopes.findIndex(envelope => envelope.id = Number(id))
-    if(index === -1){
-        throw new Error('Invalid envelope ID!')
+    if(index > -1){
+        const deleteEnvelope = envelopes.splice(index, 1)
+        return 'Envelope deleted successfully.'
     }
-    envelopes.splice(index, 1)
-    return 'Envelope deleted successfully.'
+   
+    throw new Error('Invalid envelope ID!')
+
 }
 
 module.exports = {
