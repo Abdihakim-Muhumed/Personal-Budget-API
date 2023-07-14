@@ -15,14 +15,15 @@ const getEnvelopeById = (id) => {
 
 const addNewEnvelope = (envelope) => {
     const envelopeIndex = envelopes.findIndex(envelopeInArray => envelopeInArray.title == envelope.title)
-    if(envelopeIndex ){
-        throw new Error('Envelope already exists!')
+    if(envelopeIndex === -1){
+        envelope.id = envelopes.length
+        envelopes.push(envelope)
+        envelope.balance = envelope.budget
+        totalBudget += envelope.budget
+        return envelope
     }
-    envelope.id = envelopes.length
-    envelopes.push(envelope)
-    envelope.balance = envelope.budget
-    totalBudget += envelope.budget
-    return envelope
+    throw new Error('Envelope already exists!')
+
 }
 
 const updateEnvelopeBalance = (id, amountSpent) => {
