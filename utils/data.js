@@ -28,5 +28,8 @@ const envelopes = [
         balance: 100
     },
 ]
-
-module.exports = envelopes;
+let totalBudget = 3000
+module.exports = {
+    envelopes,
+    totalBudget
+};
