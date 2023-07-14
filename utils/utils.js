@@ -1,4 +1,5 @@
-const {envelopes, totalBudget} = require('./data.js')
+const {envelopes} = require('./data.js')
+let totalBudget = require('./data.js')
 
 const getAllEnvelopes = () => {
     return envelopes
@@ -19,6 +20,7 @@ const addNewEnvelope = (envelope) => {
     }
     envelope.id = envelopes.length
     envelopes.push(envelope)
+    envelope.balance = envelope.budget
     totalBudget += envelope.budget
     return envelope
 }
