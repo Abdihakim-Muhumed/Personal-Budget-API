@@ -52,6 +52,7 @@ const deleteEnvelope = id => {
         throw new Error('Invalid envelope ID!')
     }
     envelopes.splice(index, 1)
+    return 'Envelope deleted successfully.'
 }
 
 module.exports = {
