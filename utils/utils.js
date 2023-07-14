@@ -14,7 +14,7 @@ const getEnvelopeById = (id) => {
 }
 
 const addNewEnvelope = (envelope) => {
-    const envelopeIndex = envelopes.findIndex(envelopeInArray => envelopeInArray.title = envelope.title)
+    const envelopeIndex = envelopes.findIndex(envelopeInArray => envelopeInArray.title == envelope.title)
     if(envelopeIndex ){
         throw new Error('Envelope already exists!')
     }
