@@ -28,3 +28,5 @@ const envelopes = [
         balance: 100
     },
 ]
+
+module.exports = envelopes;
