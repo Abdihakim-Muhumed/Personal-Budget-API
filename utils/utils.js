@@ -59,11 +59,34 @@ const deleteEnvelope = id => {
 
 }
 
+const transferBudget = (from, to, amount) => {
+    const indexFrom = envelopes.findIndex(envelope => envelope.id === Number(from))
+    const indexTo = envelopes.findIndex(envelope => envelope.id === Number(to))
+    const transferAmount = parseInt(amount);
+    if(indexFrom > -1 && indexTo > -1){
+        if(envelopes[indexFrom].balance < transferAmount){
+            throw new Error('Not enough balance to transfer!')
+        }
+        envelopes[indexFrom]["balance"] = envelopes[indexFrom].balance - transferAmount
+        envelopes[indexTo]["balance"]= envelopes[indexTo].balance + transferAmount
+        envelopes[indexFrom]["budget"] = envelopes[indexFrom].budget - transferAmount
+        envelopes[indexTo]["budget"] = envelopes[indexTo].budget + transferAmount
+        return {
+            from: envelopes[indexFrom],
+            to: envelopes[indexTo]
+        }
+    }else{
+        throw new Error('Invalid id(s)')
+    }
+
+}
+
 module.exports = {
     getAllEnvelopes,
     getEnvelopeById,
     addNewEnvelope,
     updateEnvelope,
     updateEnvelopeBalance,
-    deleteEnvelope
+    deleteEnvelope,
+    transferBudget
 }

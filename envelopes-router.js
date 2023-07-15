@@ -6,8 +6,10 @@ const {
     addNewEnvelope,
     updateEnvelope,
     updateEnvelopeBalance,
-    deleteEnvelope
+    deleteEnvelope,
+    transferBudget
 } = require('./utils/utils.js')
+const { envelopes } = require('./utils/data.js')
 
 
 envelopesRouter.get('/', (req, res) => {
@@ -50,6 +52,15 @@ envelopesRouter.put('/:id/spend/', (req, res) => {
         res.status(200).send({
             updatedEnvelope: updatedEnvelope
         })
+    } catch (error) {
+        res.status(403).send(error.message)
+    }
+})
+
+envelopesRouter.post('/transfer/:from/:to', (req, res) => {
+    try {
+        const tranfer = transferBudget(req.params.from, req.params.to, req.query.amount)
+        res.status(200).send(tranfer)
     } catch (error) {
         res.status(403).send(error.message)
     }
