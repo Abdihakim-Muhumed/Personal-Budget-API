@@ -28,19 +28,20 @@ const addNewEnvelope = (envelope) => {
 
 const updateEnvelopeBalance = (id, amountSpent) => {
     const envelopeIndex = envelopes.findIndex( envelope => envelope.id === Number(id))
+    amountSpent = parseInt(amountSpent)
     if(envelopes[envelopeIndex].balance < amountSpent){
         throw new Error('Not enough balance in the envelope. Current balance is: ' + envelopes[envelopeIndex].balance)
     }
-    envelopes[envelopeIndex].balance = balance - amountSpent
+    envelopes[envelopeIndex][balance] -= amountSpent
     return envelopes[envelopeIndex]
 }
 
 const updateEnvelope = (id, envelope) => {
     const envelopeIndex = envelopes.findIndex(envelopeFound => envelopeFound.id = Number(id))
     if(envelopeIndex === -1){
-        throw new Error('Envelope not found!')
+        throw new Error('Envelope not found! Invalid ')
     }
-    if (envelope.id) {
+    if(envelope.id) {
         envelope.id === Number(envelope.id);
       }
     Object.assign(envelopes[envelopeIndex], envelope);

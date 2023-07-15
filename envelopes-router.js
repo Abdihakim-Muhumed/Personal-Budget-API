@@ -33,6 +33,28 @@ envelopesRouter.post('/', (req, res) => {
     }
 })
 
+envelopesRouter.put('/:id', (req, res) => {
+    try {
+        const updatedEnvelope = updateEnvelope(req.params.id, req.query)
+        res.status(200).send({
+            updatedEnvelope: updatedEnvelope
+        })
+    } catch (error) {
+        res.status(404).send(error.message)
+    }
+})
+
+envelopesRouter.put('/:id/spend/', (req, res) => {
+    try {
+        const updatedEnvelope = updateEnvelopeBalance(req.params.id, req.query.amount)
+        res.status(200).send({
+            updatedEnvelope: updatedEnvelope
+        })
+    } catch (error) {
+        res.status(403).send(error.message)
+    }
+})
+
 envelopesRouter.delete('/:id', (req, res) => {
     try {
         const deleted = deleteEnvelope(req.params.id)
@@ -43,4 +65,6 @@ envelopesRouter.delete('/:id', (req, res) => {
         res.status(404).send(error.message)
     }
 })
+
+
 module.exports = envelopesRouter
