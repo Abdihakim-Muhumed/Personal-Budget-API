@@ -29,7 +29,7 @@ envelopesRouter.post('/', (req, res) => {
         const newEnvelope = addNewEnvelope(req.query)
         res.status(201).send(newEnvelope)
     } catch (error) {
-        res.status(404).send(error.message)
+        res.status(403).send(error.message)
     }
 })
 
