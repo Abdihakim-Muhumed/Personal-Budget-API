@@ -36,7 +36,9 @@ envelopesRouter.post('/', (req, res) => {
 envelopesRouter.delete('/:id', (req, res) => {
     try {
         const deleted = deleteEnvelope(req.params.id)
-        res.status(200).send(deleted)
+        res.status(200).send({
+            envelope: deleted
+        })
     } catch (error) {
         res.status(404).send(error.message)
     }

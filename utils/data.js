@@ -1,4 +1,4 @@
-var envelopes = [
+const envelopes = [
     {
         id: 0,
         title: 'Groceries',
