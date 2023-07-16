@@ -1,17 +1,16 @@
 CREATE TABLE "envelopes" (
-  "id" integer PRIMARY KEY,
-  "title" varchar(20),
-  "allocated_budget" money,
+  "id" SERIAL PRIMARY KEY,
+  "title" varchar(20) UNIQUE,
+  "allocated_budget" money CHECK(allocated_budget > balance),
   "balance" money,
-  "followed_user_id" integer,
   "created_at" timestamp
 );
 
 CREATE TABLE "transactions" (
-  "id" integer PRIMARY KEY,
+  "id" SERIAL PRIMARY KEY,
   "date" date,
   "amount" money,
-  "envelope_id" integer,
+  "envelope_id" integer NOT NULL,
   "reciepient" varchar(20)
 );
 
