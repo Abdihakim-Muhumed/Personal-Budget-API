@@ -73,7 +73,7 @@ const deleteEnvelope = (req, res) => {
         [id],
         (error, results) => {
             if(error){
-                res.status(404).send()
+                throw error
             }
             if(!results.rows[0]){
                 res.status(403).send('Nothing to delete. Envelope with specified ID does not exist!')
@@ -82,104 +82,31 @@ const deleteEnvelope = (req, res) => {
         }
     )
 }
-const updateEnvelope = (req, res,) => {
+
+const updateEnvelope = (req, res, next) => {
     const id = req.params.id
-    const {title, allocated_budget} = req.query
-    if(title && allocated_budget){
-        pool.query(
-            'UPDATE envelopes SET title = $2 WHERE id=$1 RETURNING *;',
-            [id, title],
-            (error, results) => {
-                if(error){
-                    throw error
-                }
-                console.log(results.rows[0])
-                pool.query(
-                    'SELECT * FROM envelopes WHERE id=$1; ',
-                    [id],
-                    (error, results) => {
-                        if(error){
-                            throw error
-                        }
-                        if((results.rows[0].allocated_budget) < allocated_budget){
-                            let difference = allocated_budget - results.rows[0].allocated_budget
-                            const addToBudget = addToBudget(difference, id, res)
-                        }
-                        if((results.rows[0].allocated_budget) > allocated_budget){
-                            let difference = results.rows[0].allocated_budget -allocated_budget
-                            const addToBudget = substractFromBudget(difference, id, res)
-                        }
-                    }
-                )
+    const {title, description, balance} = req.query
+    const updateQuery = `
+    UPDATE envelopes SET
+    title = COALESCE($2, title),
+    description = COALESCE($3, description),
+    balance = COALESCE($4, balance)
+    WHERE id = $1 
+    RETURNING *;
+    `
+    pool.query(
+        updateQuery,
+        [id, title, description, balance],
+        (error, results) => {
+            if(error){
+                throw error
             }
-        )    }
-    if(title && !allocated_budget){
-        pool.query(
-            'UPDATE envelopes SET title = $2 WHERE id=$1 RETURNING *;',
-            [id, title],
-            (error, results) => {
-                if(error){
-                    throw error
-                }
-                console.log(results.rows[0])
-                res.status(200).send(results.rows[0])
-            }
-        )
-    }
-    if(allocated_budget && !title){
-        pool.query(
-            'SELECT * FROM envelopes WHERE id=$1;',
-            [id],
-            (error, results) => {
-                if(error){
-                    throw error
-                }
-                if((results.rows[0].allocated_budget) < allocated_budget){
-                    let difference = allocated_budget - results.rows[0].allocated_budget
-                    const addToBudget = addToBudget(difference, id, res)
-                }
-                if((results.rows[0].allocated_budget) > allocated_budget){
-                    let difference = results.rows[0].allocated_budget -allocated_budget
-                    const addToBudget = substractFromBudget(difference, id, res)
-                }
-            }
-        )
-    }
-}
+            res.status(200).send({
+                updatedEnvelope: results.rows[0]
+            })           
+        }
+    )
 
-const spendFromEnvelope = (req, res) => {
-    if(amount){
-        pool.query(
-            'SELECT balance FROM envelopes WHERE id=$1;',
-            [id],
-            (error, results) => {
-                if(error){
-                    throw error
-                }
-                if(results.rows.length < 1){
-                    res.status(404).send('Invalid ID!')
-                }else{
-                    if((results.rows[0].balance - amount) < 0){
-                        res.status(403).send('Not enough balance in this envelope!')
-                    }
-                    else{
-                        pool.query(
-                            'UPDATE envelopes SET balance = balance - $2 WHERE id = $1 RETURNING *;',
-                            [id, amount],
-                            (error, results) => {
-                                if(error){
-                                    throw error
-                                }
-                                console.log(results.rows[0])
-                                next()
-                            }
-                        )
-                    }
-                }
-            }
-
-        )
-    }
 }
 
 module.exports = {
