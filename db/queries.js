@@ -53,10 +53,10 @@ const getEnvelopeById = (req, res) => {
 }
 
 const addNewEnvelope = (req, res) => {
-    const {title, allocated_budget} = req.query
+    const {title, balance} = req.query
     pool.query(
-        'INSERT INTO envelopes(title, allocated_budget, balance) VALUES( $1, $2, $2) RETURNING *',
-        [title, allocated_budget],
+        'INSERT INTO envelopes(title, balance) VALUES( $1, $2) RETURNING *',
+        [title, balance],
         (error, results) => {
             if(error){
                 res.status(403).send(error.message)
