@@ -6,7 +6,8 @@ const {
     addNewEnvelope,
     deleteEnvelope,
     updateEnvelope,
-    updateEnvelopeBalance
+    updateEnvelopeBalance,
+    transferBudget
 } = require('./db/queries.js')
 
 const { envelopes } = require('./utils/data.js')
@@ -24,8 +25,8 @@ envelopesRouter.put('/:id/spend/', updateEnvelopeBalance)
 
 envelopesRouter.post('/transfer/:from/:to', (req, res) => {
     try {
-        const tranfer = transferBudget(req.params.from, req.params.to, req.query.amount)
-        res.status(200).send(tranfer)
+        const transfer = transferBudget(req.params.from, req.params.to, req.query.amount)
+        res.status(200).send('Budget transfer sucessful!')
     } catch (error) {
         res.status(403).send(error.message)
     }

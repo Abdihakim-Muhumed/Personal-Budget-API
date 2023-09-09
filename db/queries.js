@@ -142,11 +142,43 @@ const updateEnvelopeBalance = (req, res) => {
         }
     )
 }
+
+const transferBudget = (from, to, amount)=>{
+    pool.query(
+        'SELECT balance::numeric::int FROM envelopes WHERE id=$1;',
+        [from],
+        (error, results) => {
+            if(error){
+                throw error
+            }
+            if(results.rows[0].balance < amount){
+                return 'No enough enough balance to transfer the specified amount!'
+            }
+            const transferQuery = `
+            UPDATE envelopes SET balance = CASE
+                WHEN id = $1 THEN balance + $2
+                WHEN id = $3 THEN balance - $2
+            END
+            WHERE id IN ($1,$3);
+            `
+            pool.query(
+                transferQuery,
+                [to, amount, from],
+                (error, results) => {
+                    if(error){
+                        throw error
+                    }
+                }
+            )
+        }
+    )
+}
 module.exports = {
     getAllEnvelopes,
     getEnvelopeById,
     addNewEnvelope,
     deleteEnvelope, 
     updateEnvelope,
-    updateEnvelopeBalance
+    updateEnvelopeBalance,
+    transferBudget
 }
