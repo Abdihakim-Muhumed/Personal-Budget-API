@@ -83,7 +83,7 @@ const deleteEnvelope = (req, res) => {
     )
 }
 
-const updateEnvelope = (req, res, next) => {
+const updateEnvelope = (req, res) => {
     const id = req.params.id
     const {title, description, balance} = req.query
     const updateQuery = `
@@ -109,10 +109,44 @@ const updateEnvelope = (req, res, next) => {
 
 }
 
+const updateEnvelopeBalance = (req, res) => {
+    const id =req.params.id
+    const{amount} = req.query
+    if(!amount){
+        res.status(403).send('No amount specified!')
+    }
+    pool.query(
+        'SELECT balance::numeric::int FROM envelopes WHERE id=$1;',
+        [id],
+        (error, results) => {
+            if(error){
+                throw error
+            }
+            console.log(results.rows)
+            if(results.rows[0].balance < amount){
+                res.status(403).send('No enough balance in this envelope!!!')
+            }else{
+                pool.query(
+                    'UPDATE envelopes SET balance = balance - $2 WHERE id = $1 RETURNING *;',
+                    [id, amount],
+                    (error, results) => {
+                        if(error){
+                            throw error
+                        }
+                        res.status(200).send({
+                            updatedEnvelope: results.rows[0]
+                        })
+                    }
+                )
+            }
+        }
+    )
+}
 module.exports = {
     getAllEnvelopes,
     getEnvelopeById,
     addNewEnvelope,
     deleteEnvelope, 
     updateEnvelope,
+    updateEnvelopeBalance
 }
