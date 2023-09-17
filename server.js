@@ -32,11 +32,11 @@ const swaggerDefinition = {
 }
 const options = {
     swaggerDefinition,
-    apis: [path.join(__dirname, './docs/swagger.yaml')]
+    apis: [path.join(__dirname, './docs/api-docs.yaml')]
 }
 const swaggerSpec = swaggerJsDoc(options)
 
-app.use('/doc',swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/docs',swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/envelopes', envelopesRouter)
 app.use('/transactions', transactionsRouter)
 app.get('/', (req, res) => {
