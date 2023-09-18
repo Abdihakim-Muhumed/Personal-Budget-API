@@ -1,7 +1,8 @@
 CREATE TABLE "envelopes" (
-  "id" SERIAL PRIMARY KEY,
+  "id" SERIAL PRIMARY KEY UNIQUE,
   "title" varchar(20) UNIQUE,
   "balance" integer,
+  "description" text,
   "created_at" timestamp DEFAULT now()
 );
 
