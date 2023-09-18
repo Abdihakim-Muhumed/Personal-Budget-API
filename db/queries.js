@@ -27,7 +27,7 @@ const getAllEnvelopes = (req, res) =>{
         'SELECT * FROM envelopes ORDER BY id',
         (error, results) => {
             if(error){
-                throw error
+                res.status(500).send()
             }
             res.status(200).json(results.rows)
         }
