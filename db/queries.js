@@ -11,7 +11,7 @@ const pool = new Pool(DB_CONFIG);
 
 const sampleQuery = () => {
     pool.query(
-        'SELECT * FROM transactions;',
+        'SELECT * FROM envelopes;',
         (error, results) => {
             if(error){
                 throw error
@@ -53,10 +53,10 @@ const getEnvelopeById = (req, res) => {
 }
 
 const addNewEnvelope = (req, res) => {
-    const {title, balance} = req.query
+    const {title, balance, description} = req.query
     pool.query(
-        'INSERT INTO envelopes(title, balance) VALUES( $1, $2) RETURNING *',
-        [title, balance],
+        'INSERT INTO envelopes(title, balance, description) VALUES( $1, $2, $3) RETURNING *',
+        [title, balance, description],
         (error, results) => {
             if(error){
                 res.status(403).send(error.message)
