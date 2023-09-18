@@ -23,14 +23,7 @@ envelopesRouter.put('/:id', updateEnvelope)
 
 envelopesRouter.put('/:id/spend/', updateEnvelopeBalance)
 
-envelopesRouter.post('/transfer/:from/:to', (req, res) => {
-    try {
-        const transfer = transferBudget(req.params.from, req.params.to, req.query.amount)
-        res.status(200).send('Budget transfer sucessful!')
-    } catch (error) {
-        res.status(403).send(error.message)
-    }
-})
+envelopesRouter.post('/transfer/:from/:to',transferBudget)
 
 envelopesRouter.delete('/:id', deleteEnvelope)
 

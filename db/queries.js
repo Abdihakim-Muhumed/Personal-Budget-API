@@ -1,9 +1,5 @@
 const Pool = require('pg').Pool
 const DB_CONFIG = require('../config.js').DB_CONFIG;
-const {
-    substractFromBudget,
-    addToBudget
-} = require('./utility-queries.js')
 
 
 const pool = new Pool(DB_CONFIG);
@@ -28,23 +24,25 @@ const getAllEnvelopes = (req, res) =>{
         (error, results) => {
             if(error){
                 res.status(500).send()
-            }
-            res.status(200).json(results.rows)
+            }else{
+                res.status(200).json(results.rows)
+            } 
         }
     )
 }
 
 const getEnvelopeById = (req, res) => {
     const id = req.params.id
+    console.log(id)
     pool.query(
         'SELECT * FROM envelopes WHERE id = $1',
         [id],
         (error, results) => {
             if(error){
-                throw error
+                res.status(400).send()
             }
-            if(results.rows.length < 1){
-                res.status(404).send('Invalid ID!')
+            else if(results.rows.length < 1){
+                res.status(404).send()
             }else{
                 res.status(200).json(results.rows)
             }
@@ -59,9 +57,10 @@ const addNewEnvelope = (req, res) => {
         [title, balance, description],
         (error, results) => {
             if(error){
-                res.status(403).send(error.message)
+                res.status(400).send(error.message)
+            }else{
+                res.status(201).json(results.rows)
             }
-            res.status(201).send(results.rows)
         }
     )
 }
@@ -73,12 +72,13 @@ const deleteEnvelope = (req, res) => {
         [id],
         (error, results) => {
             if(error){
-                throw error
+                res.status(400).send()
             }
-            if(!results.rows[0]){
-                res.status(403).send('Nothing to delete. Envelope with specified ID does not exist!')
+            else if(!results.rows[0]){
+                res.status(404).send('Envelope not found!')
+            }else{
+                res.status(200).send('Envelope deleted')
             }
-            res.status(200).send('Envelope deleted deleted with ID: '+id)
         }
     )
 }
@@ -99,11 +99,10 @@ const updateEnvelope = (req, res) => {
         [id, title, description, balance],
         (error, results) => {
             if(error){
-                throw error
+                res.status(400).send()
+            }else{
+                res.status(200).json(results.rows[0])
             }
-            res.status(200).send({
-                updatedEnvelope: results.rows[0]
-            })           
         }
     )
 
@@ -120,9 +119,8 @@ const updateEnvelopeBalance = (req, res) => {
         [id],
         (error, results) => {
             if(error){
-                throw error
+                res.status(400).send()
             }
-            console.log(results.rows)
             if(results.rows[0].balance < amount){
                 res.status(403).send('No enough balance in this envelope!!!')
             }else{
@@ -131,11 +129,10 @@ const updateEnvelopeBalance = (req, res) => {
                     [id, amount],
                     (error, results) => {
                         if(error){
-                            throw error
+                            res.status(400).send()
+                        }else{
+                            res.status(200).json(results.rows[0])
                         }
-                        res.status(200).send({
-                            updatedEnvelope: results.rows[0]
-                        })
                     }
                 )
             }
@@ -143,16 +140,18 @@ const updateEnvelopeBalance = (req, res) => {
     )
 }
 
-const transferBudget = (from, to, amount)=>{
+const transferBudget = (req, res)=>{
+    const {from, to} = req.params
+    const {amount} = req.query
     pool.query(
         'SELECT balance::numeric::int FROM envelopes WHERE id=$1;',
         [from],
         (error, results) => {
             if(error){
-                throw error
+                res.status(400).send()
             }
             if(results.rows[0].balance < amount){
-                return 'No enough enough balance to transfer the specified amount!'
+                res.status(403).send('No enough enough balance to transfer the specified amount!')
             }
             const transferQuery = `
             UPDATE envelopes SET balance = CASE
@@ -166,7 +165,9 @@ const transferBudget = (from, to, amount)=>{
                 [to, amount, from],
                 (error, results) => {
                     if(error){
-                        throw error
+                        res.status(500).send()
+                    }else{
+                        res.status(200).send('Budget transfered successfully!')
                     }
                 }
             )

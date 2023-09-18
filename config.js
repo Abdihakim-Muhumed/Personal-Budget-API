@@ -1,5 +1,5 @@
-const dotenv = require('dotenv');
-dotenv.config();
+const dotenv = require('dotenv')
+dotenv.config()
 
 // DB_CONFIG
 const DB_CONFIG = {
@@ -9,7 +9,6 @@ const DB_CONFIG = {
     password: process.env.PASSWORD, 
     port:process.env.DB_PORT
 }
-
 module.exports = {
-    DB_CONFIG
+    DB_CONFIG,
 }

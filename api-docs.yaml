@@ -25,10 +25,10 @@ paths:
       description: Adds a new envelope to the api and returns it
       operationId: addNewEnvelope
       parameters:
-        - name: envelopeId
+        - name: id
           in: query
           description: ID for the new envelope
-          required: true
+          required: false
           schema:
             type: integer
             format: int64
@@ -50,16 +50,15 @@ paths:
             type: integer
             format: int64
       responses:
-        '200':
+        '201':
           description: Successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Envelope'
         '400':
-          description: Invalid input
-      
-  /envelope/{envelopeId}:
+          description: Invalid input     
+  /envelope/{id}:
     get:
       tags:
         - envelope
@@ -67,7 +66,7 @@ paths:
       description: Returns a single envelope
       operationId: getEnvelopeById
       parameters:
-        - name: envelopeId
+        - name: id
           in: path
           description: ID of envelope to return
           required: true
@@ -88,14 +87,14 @@ paths:
           description: Invalid ID supplied
         '404':
           description: Envelope not found
-    post:
+    put:
       tags:
         - envelope
       summary: Updates an envelope in the budget.
       description: ''
       operationId: updateEnvelope
       parameters:
-        - name: envelopeId
+        - name: id
           in: path
           description: ID of the envelope that needs to be updated
           required: true
@@ -104,22 +103,24 @@ paths:
             format: int64
         - name: title
           in: query
-          description: Title of the envelope that needs to be updated
+          description: New title for the envelope.
           schema:
             type: string
         - name: description
           in: query
-          description: Small description of the envelope that needs to be updated
+          description: New description for the envelope
           schema:
             type: string
         - name: balance
           in: query
-          description: a new balance for this specific envelope
+          description: New balance for the envelope
           schema:
             type: integer
             format: int64
       responses:
-        '405':
+        '200':
+          description: Successful operation
+        '400':
           description: Invalid input
     delete:
       tags:
@@ -128,7 +129,7 @@ paths:
       description: delete an envelope from the budget
       operationId: deleteEnvelope
       parameters:
-        - name: envelopeId
+        - name: id
           in: path
           description: Id of the envelope to delete
           required: true
@@ -136,17 +137,22 @@ paths:
             type: integer
             format: int64
       responses:
+        '200':
+          description: Operation Successful
         '400':
-          description: Invalid envelope value
-  /envelope/{envelopeId}/spend:
-    post:
+          description: Invalid input
+        '404':
+          description: Envelope not found
+        
+  /envelope/{id}/spend:
+    put:
       tags:
         - envelope
       summary: Updates envelope budget
       description: 'Subtracts specified amount from the balance of the envelope and returns it with updated balance.'
       operationId: updateEnvelopeBalance
       parameters:
-        - name: envelopeId
+        - name: id
           in: path
           description: ID of envelope to update balance for.
           required: true
@@ -204,17 +210,12 @@ paths:
       responses:
         '200':
           description: successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties:
-                  type: integer
-                  format: int32
         '400':
           description: Invalid input
         '403': 
-          description: No enough balance to transfer
+          description: No enough balance to transfer the specified amount
+        '500':
+          description: Server Error
 components:
   schemas:
     Envelope:
