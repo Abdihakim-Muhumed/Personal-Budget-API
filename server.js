@@ -32,7 +32,7 @@ const swaggerDefinition = {
 }
 const options = {
     swaggerDefinition,
-    apis: [path.join(__dirname, './docs/api-docs.yaml')]
+    apis: [path.join(__dirname, './api-docs.yaml')]
 }
 const swaggerSpec = swaggerJsDoc(options)
 
