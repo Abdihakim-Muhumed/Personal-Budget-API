@@ -37,7 +37,7 @@ const options = {
 const swaggerSpec = swaggerJsDoc(options)
 
 app.use('/docs',swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-app.use('/envelopes', envelopesRouter)
+app.use('/envelope', envelopesRouter)
 app.use('/transactions', transactionsRouter)
 app.get('/', (req, res) => {
     res.send('Hello world!')
