@@ -142,8 +142,7 @@ paths:
         '400':
           description: Invalid input
         '404':
-          description: Envelope not found
-        
+          description: Envelope not found        
   /envelope/{id}/spend:
     put:
       tags:
@@ -176,8 +175,7 @@ paths:
         '403':
           description: No enough balance to spend the specified amount.
         '400':
-          description: Invalid input.
-          
+          description: Invalid input.          
   /envelope/transfer/{from}/{to}:
     post:
       tags:

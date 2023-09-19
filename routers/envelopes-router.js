@@ -8,9 +8,9 @@ const {
     updateEnvelope,
     updateEnvelopeBalance,
     transferBudget
-} = require('./db/queries.js')
+} = require('../db/queries.js')
 
-const { envelopes } = require('./utils/data.js')
+const { envelopes } = require('../utils/data.js')
 
 
 envelopesRouter.get('/', getAllEnvelopes)
