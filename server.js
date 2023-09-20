@@ -1,8 +1,8 @@
 const express = require('express')
 const app  =  express()
 const PORT  = 3000
-const envelopesRouter = require('./envelopes-router.js')
-const transactionsRouter = require('./transactions-router.js')
+const envelopesRouter = require('./routers/envelopes-router')
+const transactionsRouter = require('./routers/transactions-router')
 const bodyParser = require('body-parser')
 const swaggerJsDoc = require('swagger-jsdoc')
 const swaggerUi = require('swagger-ui-express')
@@ -40,7 +40,7 @@ app.use('/docs',swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/envelope', envelopesRouter)
 app.use('/transactions', transactionsRouter)
 app.get('/', (req, res) => {
-    res.send('Hello world!')
+    res.redirect(301, '/docs')
 })
 
 app.use(bodyParser.json())
