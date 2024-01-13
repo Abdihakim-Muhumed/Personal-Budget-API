@@ -14,7 +14,7 @@ if(NODE_ENV=='development'){
     }
 }else{
     const DB_CONFIG = {
-        connectionString: process.env.DATABASEURL,
+        connectionString: process.env.DATABASE_URL,
     }
 }
 module.exports = {
