@@ -19,12 +19,12 @@ sampleQuery()
 
 const getAllTransactions = (req, res) => {
     pool.query(
-        'SELECT * FROM transactions;',
+        'SELECT * FROM transactions ORDER BY id;',
         (error, results) => {
             if(error) {
                 res.status(500).send(error)
             }else{
-                res.status(200).send(results.rows)
+                res.status(200).json(results.rows)
             }
 
         }
