@@ -16,3 +16,21 @@ const sampleQuery = () => {
     )
 }
 sampleQuery()
+
+const getAllTransactions = (req, res) => {
+    pool.query(
+        'SELECT * FROM transactions;',
+        (error, results) => {
+            if(error) {
+                res.status(500).send(error)
+            }else{
+                res.status(200).send(results.rows)
+            }
+
+        }
+    )
+}
+
+module.exports = {
+    getAllTransactions,
+}
