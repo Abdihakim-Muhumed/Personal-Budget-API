@@ -31,6 +31,26 @@ const getAllTransactions = (req, res) => {
     )
 }
 
+const getTransactionById = (req, res) => {
+    const id = req.params.id
+    pool.query(
+        'SELECT * FROM transactions WHERE id = $1;'
+        [id],
+        (error, results) => {
+            if(error){
+                console.log(error)
+                res.status(400).send(error)
+            }
+            else if(results.rows.length < 1){
+                res.status(404).send()
+            }else{
+                res.status(200).json(results.rows)
+                console.log(results.rows)
+            }
+        }
+     )
+}
 module.exports = {
     getAllTransactions,
+    getTransactionById,
 }
