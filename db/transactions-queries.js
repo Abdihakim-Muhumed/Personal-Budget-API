@@ -50,7 +50,52 @@ const getTransactionById = (req, res) => {
         }
      )
 }
+
+const addNewTransaction = (req, res) => {
+    const {amount, envelope_id, reciepient} = req.query
+    if(!amount || !envelope_id){
+        res.status(403).send('Required query parameters not provided!')
+    }else{
+        pool.query(
+            'SELECT balance::numeric::int FROM envelopes WHERE id=$1;',
+            [envelope_id],
+            (error, results) => {
+                if(error){
+                    res.status(400).send()
+                }
+                if(results.rows[0].balance < amount){
+                    res.status(403).send('No enough balance in this envelope!!!')
+                }else{
+                    pool.query(
+                        'UPDATE envelopes SET balance = balance - $2 WHERE id = $1 RETURNING *;',
+                        [envelope_id, amount],
+                        (error, results) => {
+                            if(error){
+                                res.status(400).send(error)
+                            }else{
+                                pool.query(
+                                    'INSERT INTO  transactions(amount, envelope_id, reciepient) VALUES($1, $2, $3) RETURNING *;',
+                                    [amount, envelope_id, reciepient],
+                                    (error, results) => {
+                                        if(error){
+                                            res.status(500).send(error)
+                                        }else{
+                                            res.status(201).json(results.rows)
+                        
+                                        }
+                                    }
+                                )
+                            }
+                        }
+                    )
+                }
+            }
+        )
+    }
+    
+}
 module.exports = {
     getAllTransactions,
     getTransactionById,
+    addNewTransaction,
 }
