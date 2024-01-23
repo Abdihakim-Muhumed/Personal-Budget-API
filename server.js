@@ -40,7 +40,7 @@ const swaggerSpec = swaggerJsDoc(options)
 
 app.use('/docs',swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/envelope', envelopesRouter)
-app.use('/transactions', transactionsRouter)
+app.use('/transaction', transactionsRouter)
 app.get('/', (req, res) => {
     res.redirect(301, '/docs')
 })

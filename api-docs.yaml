@@ -1,6 +1,8 @@
 tags:
   - name: envelope
-    description: Everything about the envelopes in your budget
+    description: Everything about the envelopes in the budget
+  - name: transaction
+    description: All about the transactions in the budget.
 paths:
   /envelope:
     get:
@@ -214,6 +216,123 @@ paths:
           description: No enough balance to transfer the specified amount
         '500':
           description: Server Error
+  /transaction:
+    get:
+      tags:
+        - transaction
+      summary: Get all transactions.
+      description: Retrieves all transactions from the database
+      operationId: getAllTransactions
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                  $ref: '#/components/schemas/Transaction'
+        '500':
+          description: Server Error
+    post:
+      tags:
+        - transaction
+      summary: Add a new transaction to the budget
+      description: Adds a new transaction to the api and returns it
+      operationId: addNewTransaction
+      parameters:
+        - name: id
+          in: query
+          description: ID for the new transaction
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: date
+          in: query
+          description: Date of the transaction. Default is current.
+          required: false
+          schema:
+            type: date
+        - name: reciepient
+          in: query
+          required: false
+          description: Description of the reciepient of the payment.
+          schema:
+            type: string
+        - name: amount
+          in: query
+          required: true 
+          description: Payment amount of the transaction.
+          schema:
+            type: integer
+            format: int64
+        - name: envelope_id
+          in: query
+          required: true 
+          description: ID of the envelope from which the payment is made.
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '400':
+          description: Invalid input
+        '403':
+          description: Forbidden operation
+        '500':
+          description: Internal Server Error
+  /transaction/{id}:
+    get:
+      tags:
+        - transaction
+      summary: Get transaction by ID.
+      description: Retrieves the transaction with the provided id
+      operationId: getTransactionById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Id of the transaction to fetch.
+          schema:
+             type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '500':
+          description: Internal Server Error
+        '404':
+          description: Transaction not found
+    delete:
+      tags:
+        - transaction
+      summary: Delete a transaction
+      description: Deletes a transaction of the provided id.
+      operationId: deleteTransaction
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Id of the transaction to delete.
+          schema:
+             type: integer
+      responses:
+        '200':
+          description: Operation Successful
+        '400':
+          description: Invalid input
+        '404':
+          description: Transaction not found 
 components:
   schemas:
     Envelope:
@@ -235,3 +354,26 @@ components:
           type: integer
           format: int64
           example: 3000
+    Transaction:
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        date:
+          type: date
+          example: 2024-01-22T21:00:00.000Z
+        amount:
+          type: integer
+          format: int64
+          example: 2500
+        envelope_id:
+          type: integer
+          format: int64
+          example: 4
+        reciepient:
+          type: string
+          example: Artcaffe

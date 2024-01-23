@@ -61,7 +61,7 @@ const addNewTransaction = (req, res) => {
             [envelope_id],
             (error, results) => {
                 if(error){
-                    res.status(400).send()
+                    res.status(500).send()
                 }
                 if(results.rows[0].balance < amount){
                     res.status(403).send('No enough balance in this envelope!!!')
