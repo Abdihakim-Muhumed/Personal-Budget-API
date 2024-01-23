@@ -94,8 +94,25 @@ const addNewTransaction = (req, res) => {
     }
     
 }
+const deleteTransaction = (req, res) => {
+    const id = req.params.id
+    pool.query(
+        'DELETE FROM transactions WHERE id = $1 RETURNING *;',
+        [id],
+        (error, results) => {
+            if(error){
+                res.status(500).send(error)
+            }else if(!results.rows[0]){
+                res.status(404).send("Transaction not found!")
+            }else{   
+                res.status(200).send('Transaction Deleted!')
+            }
+        }
+    )
+}
 module.exports = {
     getAllTransactions,
     getTransactionById,
     addNewTransaction,
+    deleteTransaction
 }
