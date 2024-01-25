@@ -28,7 +28,8 @@ const swaggerDefinition = {
         description: "Find out more about Personal Budget API here",
         url: "https://github.com/Abdihakim-Muhumed/my-pf-api",
         servers:{
-            url: "http://localhost/3000"
+            url: "http://localhost/3000",
+            url: "https://personal-budget-api-cfy9.onrender.com/"
         }
     }
 }
