@@ -22,7 +22,7 @@ const swaggerDefinition = {
             name: "MIT",
             url: "https://spdx.org/licenses/MIT.html"
         },
-        version: "1.0.0"
+        version: "1.0.1"
     },
     externalDocs: {
         description: "Find out more about Personal Budget API here",
