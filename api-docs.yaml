@@ -332,7 +332,35 @@ paths:
         '400':
           description: Invalid input
         '404':
-          description: Transaction not found 
+          description: Transaction not found
+  /transaction/{envelope_id}:
+    get:
+      tags:
+        - transaction
+      summary: Get transaction by envelope_ID.
+      description: Retrieves the transaction with the provided envelope_id
+      operationId: getTransactionByEnvelopeId
+      parameters:
+        - name: envelope_id
+          in: path
+          required: true
+          description: Envelope id of the transaction to fetch.
+          schema:
+             type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '500':
+          description: Internal Server Error
+        '404':
+          description: Transaction not found
 components:
   schemas:
     Envelope:

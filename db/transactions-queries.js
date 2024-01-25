@@ -50,6 +50,22 @@ const getTransactionById = (req, res) => {
         }
      )
 }
+const getTransactionByEnvelopeId = (req, res) => {
+    const envelope_id = req.params.envelope_id
+    pool.query(
+        'SELECT * FROM transactions WHERE envelope_id = $1',
+        [envelope_id],
+        (error, results) => {
+            if(error){
+                res.status(500).send(error)
+            }else if(results.rows.length < 1){
+                res.status(404).send()
+            }else{
+                res.status(200).json(results.rows)
+            }
+        }
+    )
+}
 
 const addNewTransaction = (req, res) => {
     const {amount, envelope_id, reciepient} = req.query
@@ -114,5 +130,6 @@ module.exports = {
     getAllTransactions,
     getTransactionById,
     addNewTransaction,
-    deleteTransaction
+    deleteTransaction,
+    getTransactionByEnvelopeId
 }
