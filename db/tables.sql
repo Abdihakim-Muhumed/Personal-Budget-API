@@ -9,7 +9,7 @@ CREATE TABLE "envelopes" (
 CREATE TABLE "transactions" (
   "id" SERIAL PRIMARY KEY,
   "date" date DEFAULT CURRENT_DATE,
-  "amount" integer,
+  "amount" integer NOT NULL,
   "envelope_id" integer NOT NULL,
   "reciepient" varchar(20)
 );
