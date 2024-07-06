@@ -3,7 +3,7 @@ const DB_CONFIG = require('../config.js').DB_CONFIG;
 
 
 const pool = new Pool(DB_CONFIG);
-
+/*
 const sampleQuery = () => {
     pool.query(
         'SELECT * FROM transactions;',
@@ -16,7 +16,7 @@ const sampleQuery = () => {
     )
 }
 sampleQuery()
-
+*/
 const getAllTransactions = (req, res) => {
     pool.query(
         'SELECT * FROM transactions ORDER BY id;',
