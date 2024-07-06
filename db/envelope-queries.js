@@ -4,7 +4,7 @@ const DB_CONFIG = require('../config.js').DB_CONFIG;
 
 const pool = new Pool(DB_CONFIG);
 
-
+/*
 const sampleQuery = () => {
     pool.query(
         'SELECT * FROM envelopes;',
@@ -17,7 +17,7 @@ const sampleQuery = () => {
     )
 }
 sampleQuery()
-
+*/
 const getAllEnvelopes = (req, res) =>{
     pool.query(
         'SELECT * FROM envelopes ORDER BY id',
